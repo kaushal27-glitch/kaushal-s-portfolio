@@ -17,4 +17,16 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    target: 'esnext',
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom', 'framer-motion'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
 }));
