@@ -27,7 +27,14 @@ jobs:
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./insightstream-labs-main/dist
+        run: |
+          cp -r insightstream-labs-main/dist/* .
+          
+      - name: Commit and Push
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Deploy to GitHub Pages" || true
+          git push
