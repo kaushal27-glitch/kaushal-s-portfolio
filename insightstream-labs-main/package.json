@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://kaushal27-glitch.github.io/kaushal-s-portfolio/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
