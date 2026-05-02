@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import LinuxWindow from "./LinuxWindow";
 import { Mail, Phone, MapPin, Linkedin, Github, Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 const ContactSection = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -48,7 +48,7 @@ const ContactSection = () => {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-2 rounded hover:bg-secondary/50 transition-colors group block"
+                      className="flex items-center gap-3 p-2 rounded hover:bg-secondary/50 transition-colors group"
                     >
                       <item.icon className="w-4 h-4 text-primary group-hover:text-accent" />
                       <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{item.label}</span>

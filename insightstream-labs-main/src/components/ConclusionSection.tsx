@@ -3,15 +3,15 @@ import { Mail, Linkedin, Github, MapPin } from "lucide-react";
 
 const ConclusionSection = () => {
   const socialLinks = [
-    { icon: Github, label: "Github", href: "https://github.com" },
-    { icon: Linkedin, label: "Linkedin", href: "https://linkedin.com" },
+    { icon: Github, label: "Github", href: "https://github.com/kaushal27-glitch" },
+    { icon: Linkedin, label: "Linkedin", href: "www.linkedin.com/in/kaushalg718"},
     { icon: Mail, label: "Email", href: "mailto:kaushalg718@gmail.com" },
     { icon: MapPin, label: "Location", href: "#" },
   ];
 
   const socialIcons = [
     { label: "Instagram", href: "https://www.instagram.com/kaushhhalll/" },
-    { label: "Twitter / X", href: "#" },
+    { label: "Twitter / X", href: "https://x.com/KaushalG366276" },
   ];
 
   return (
