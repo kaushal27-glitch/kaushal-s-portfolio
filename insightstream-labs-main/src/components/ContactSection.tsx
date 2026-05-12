@@ -19,7 +19,7 @@ const ContactSection = () => {
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <div className="font-mono text-sm text-terminal-green mb-6">$ mail --compose</div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-10">Contact</h2>
+          <h3 className="text-3xl md:text-4xl font-bold mb-10">Contact</h3>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
@@ -131,7 +131,7 @@ const ContactSection = () => {
                   Download my resume to learn more about my experience, skills, and projects.
                 </p>
                 <a
-                  href="/KAUSHALG.CVCV.pdf"
+                  href="/kaushal-s-portfolio/KAUSHALG.CVCV.pdf"
                   download="KAUSHALG.CVCV.pdf"
                   className="inline-block"
                 >
