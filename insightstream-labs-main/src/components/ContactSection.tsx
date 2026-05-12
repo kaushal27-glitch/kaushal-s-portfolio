@@ -14,23 +14,15 @@ const ContactSection = () => {
     window.location.href = `mailto:kaushalg718@gmail.com?subject=Portfolio Contact from ${form.name}&body=${form.message}`;
   };
 
-  const handleResumeDownload = async () => {
-    try {
-      const response = await fetch('/kaushal-s-portfolio/KAUSHALG.CVCV.pdf');
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'Kaushal_G_Resume.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Download failed:', error);
-      // Fallback to direct link
-      window.open('/kaushal-s-portfolio/KAUSHALG.CVCV.pdf', '_blank');
-    }
+  const handleResumeDownload = () => {
+    // Direct download link using the correct path
+    const link = document.createElement('a');
+    link.href = '/KAUSHALG.CVCV.pdf';
+    link.download = 'Kaushal_G_Resume.pdf';
+    link.setAttribute('target', '_blank');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
