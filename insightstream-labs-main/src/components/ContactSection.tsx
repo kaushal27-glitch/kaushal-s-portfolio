@@ -14,12 +14,31 @@ const ContactSection = () => {
     window.location.href = `mailto:kaushalg718@gmail.com?subject=Portfolio Contact from ${form.name}&body=${form.message}`;
   };
 
+  const handleResumeDownload = async () => {
+    try {
+      const response = await fetch('/kaushal-s-portfolio/KAUSHALG.CVCV.pdf');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Kaushal_G_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      // Fallback to direct link
+      window.open('/kaushal-s-portfolio/KAUSHALG.CVCV.pdf', '_blank');
+    }
+  };
+
   return (
     <section id="contact" className="py-20">
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <div className="font-mono text-sm text-terminal-green mb-6">$ mail --compose</div>
-          <h3 className="text-3xl md:text-4xl font-bold mb-10">Contact</h3>
+          <h2 className="text-3xl md:text-4xl font-bold mb-10">Contact</h2>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
@@ -130,15 +149,13 @@ const ContactSection = () => {
                 <p className="text-sm text-muted-foreground">
                   Download my resume to learn more about my experience, skills, and projects.
                 </p>
-                <a
-                  href="/kaushal-s-portfolio/KAUSHALG.CVCV.pdf"
-                  download="KAUSHALG.CVCV.pdf"
-                  className="inline-block"
+                <Button 
+                  variant="terminal" 
+                  className="w-full"
+                  onClick={handleResumeDownload}
                 >
-                  <Button variant="terminal" className="w-full">
-                    $ download --resume
-                  </Button>
-                </a>
+                  $ download --resume
+                </Button>
               </div>
             </LinuxWindow>
           </motion.div>
