@@ -14,6 +14,17 @@ const ContactSection = () => {
     window.location.href = `mailto:kaushalg718@gmail.com?subject=Portfolio Contact from ${form.name}&body=${form.message}`;
   };
 
+  const handleResumeDownload = () => {
+    // Direct download link using the correct path
+    const link = document.createElement('a');
+    link.href = '/KAUSHALG.CVCV.pdf';
+    link.download = 'Kaushal_G_Resume.pdf';
+    link.setAttribute('target', '_blank');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section id="contact" className="py-20">
       <div className="container">
