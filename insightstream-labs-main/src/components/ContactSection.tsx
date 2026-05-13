@@ -142,7 +142,7 @@ const ContactSection = () => {
                   Download my resume to learn more about my experience, skills, and projects.
                 </p>
                 <a
-                  href="KAUSHALG.CVCV.pdf"
+                  href="/kaushal-s-portfolio/KAUSHALG.CVCV.pdf"
                   download="KAUSHALG.CVCV.pdf"
                   className="inline-block"
                 >
