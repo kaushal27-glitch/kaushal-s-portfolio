@@ -8,10 +8,49 @@ import React from 'react';
 const ContactSection = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [showLocationPopup, setShowLocationPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    window.location.href = `mailto:kaushalg718@gmail.com?subject=Portfolio Contact from ${form.name}&body=${form.message}`;
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      // Send to backend API
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setStatusMessage('✅ Message saved to database! I\'ll get back to you soon.');
+        // Clear form
+        setForm({ name: "", email: "", message: "" });
+        // Clear status after 3 seconds
+        setTimeout(() => setSubmitStatus('idle'), 3000);
+      } else {
+        setSubmitStatus('error');
+        setStatusMessage('❌ Error saving message. Please try again.');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      setStatusMessage('❌ Could not connect to server. Make sure backend is running on localhost:5000');
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleResumeDownload = () => {
@@ -121,9 +160,19 @@ const ContactSection = () => {
                     required
                   />
                 </div>
-                <Button variant="terminal" type="submit" className="w-full">
-                  $ send --message
+                <Button variant="terminal" type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? '$ sending...' : '$ send --message'}
                 </Button>
+                {submitStatus === 'success' && (
+                  <div className="bg-green-500/20 border border-green-500 rounded p-2 text-xs text-green-400">
+                    {statusMessage}
+                  </div>
+                )}
+                {submitStatus === 'error' && (
+                  <div className="bg-red-500/20 border border-red-500 rounded p-2 text-xs text-red-400">
+                    {statusMessage}
+                  </div>
+                )}
               </form>
             </LinuxWindow>
           </motion.div>
