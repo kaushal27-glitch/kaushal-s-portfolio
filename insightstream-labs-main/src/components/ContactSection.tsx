@@ -18,8 +18,11 @@ const ContactSection = () => {
     setSubmitStatus('idle');
 
     try {
+      // Use Heroku backend URL in production, localhost in development
+      const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      
       // Send to backend API
-      const response = await fetch('http://localhost:5000/api/contact', {
+      const response = await fetch(`${backendURL}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
