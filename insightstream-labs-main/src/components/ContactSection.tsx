@@ -195,8 +195,8 @@ const ContactSection = () => {
                   Download my resume to learn more about my experience, skills, and projects.
                 </p>
                 <a
-                  href="/kaushal-s-portfolio/KAUSHALG.CVCV.pdf"
-                  download="KAUSHALG.CVCV.pdf"
+                  href={`${import.meta.env.BASE_URL}KaushalG_CV_.pdf`}
+                  download="Kaushal_G_Resume.pdf"
                   className="inline-block"
                 >
                   <Button variant="terminal" className="w-full">
