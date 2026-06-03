@@ -59,7 +59,7 @@ const ContactSection = () => {
   const handleResumeDownload = () => {
     // Direct download link using the correct path
     const link = document.createElement('a');
-    link.href = '/KAUSHALG.CVCV.pdf';
+    link.href = '/KaushalG_CV_.pdf';
     link.download = 'Kaushal_G_Resume.pdf';
     link.setAttribute('target', '_blank');
     document.body.appendChild(link);
