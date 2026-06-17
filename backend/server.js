@@ -33,6 +33,16 @@ const PORT = process.env.BACKEND_PORT || process.env.PORT || 3001;
 app.use(cors());          
 app.use(express.json());  
 
+// Admin Auth
+app.post('/api/admin/auth', (req, res) => {
+  const { password } = req.body;
+  if (password && password === process.env.ADMIN_PASSWORD) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(401).json({ success: false });
+  }
+});
+
 // Root Route
 app.get('/', (req, res) => {
   res.send('Welcome to my portfolio backend API!');
