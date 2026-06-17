@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 export default defineConfig(({ mode }) => ({
-  base: '/',
+  base: process.env.GITHUB_PAGES === 'true' ? '/kaushal-s-portfolio/' : '/',
   root: __dirname,
   server: {
     host: "0.0.0.0",
