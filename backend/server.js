@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 // Database Connection
@@ -33,8 +34,17 @@ const PORT = process.env.BACKEND_PORT || process.env.PORT || 3001;
 app.use(cors());          
 app.use(express.json());  
 
+// Rate limiter: max 10 attempts per 15 minutes per IP
+const adminAuthLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts. Try again in 15 minutes.' },
+});
+
 // Admin Auth
-app.post('/api/admin/auth', (req, res) => {
+app.post('/api/admin/auth', adminAuthLimiter, (req, res) => {
   const { password } = req.body;
   if (password && password === process.env.ADMIN_PASSWORD) {
     res.status(200).json({ success: true });

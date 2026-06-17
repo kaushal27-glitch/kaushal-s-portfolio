@@ -35,6 +35,9 @@ const AdminGate = ({ children }: AdminGateProps) => {
       if (res.ok) {
         sessionStorage.setItem(SESSION_KEY, "true");
         setAuthed(true);
+      } else if (res.status === 429) {
+        setError("Too many attempts. Try again in 15 minutes.");
+        setPassword("");
       } else {
         setError("Incorrect password.");
         setPassword("");
