@@ -1,11 +1,12 @@
 const { Client } = require('pg');
+require('dotenv').config();
 
 // Connect as postgres superuser to create database and user
 const adminClient = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'postgres',
-  password: 'Kaushakal7', // Try this password first
+  host: process.env.DB_ADMIN_HOST || 'localhost',
+  port: process.env.DB_ADMIN_PORT || 5432,
+  user: process.env.DB_ADMIN_USER || 'postgres',
+  password: process.env.DB_ADMIN_PASSWORD,
   database: 'postgres',
 });
 
@@ -31,16 +32,18 @@ async function setupDatabase() {
     // Create portfolio_user role
     console.log('👤 Creating portfolio_user...');
     try {
+      const dbPassword = process.env.DB_PASSWORD || 'portfolio_secure_pass';
       await adminClient.query(
-        `CREATE USER portfolio_user WITH PASSWORD 'portfolio_secure_pass';`
+        `CREATE USER portfolio_user WITH PASSWORD '${dbPassword}';`
       );
       console.log('✅ User portfolio_user created');
     } catch (e) {
       if (e.message.includes('already exists')) {
         console.log('ℹ️  User portfolio_user already exists');
         // Reset password
+        const dbPassword = process.env.DB_PASSWORD || 'portfolio_secure_pass';
         await adminClient.query(
-          `ALTER USER portfolio_user WITH PASSWORD 'portfolio_secure_pass';`
+          `ALTER USER portfolio_user WITH PASSWORD '${dbPassword}';`
         );
         console.log('✅ Password reset for portfolio_user');
       } else {
@@ -56,10 +59,10 @@ async function setupDatabase() {
     
     // Connect to portfolio_db and grant schema privileges
     const schemaClient = new Client({
-      host: 'localhost',
-      port: 5432,
-      user: 'postgres',
-      password: 'Kaushakal7',
+      host: process.env.DB_ADMIN_HOST || 'localhost',
+      port: process.env.DB_ADMIN_PORT || 5432,
+      user: process.env.DB_ADMIN_USER || 'postgres',
+      password: process.env.DB_ADMIN_PASSWORD,
       database: 'portfolio_db',
     });
     
@@ -78,11 +81,11 @@ async function setupDatabase() {
     // Now connect to portfolio_db and create tables
     console.log('\n📊 Creating tables...');
     const dbClient = new Client({
-      host: 'localhost',
-      port: 5432,
-      user: 'portfolio_user',
-      password: 'portfolio_secure_pass',
-      database: 'portfolio_db',
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 5432,
+      user: process.env.DB_USER || 'portfolio_user',
+      password: process.env.DB_PASSWORD || 'portfolio_secure_pass',
+      database: process.env.DB_NAME || 'portfolio_db',
     });
 
     await dbClient.connect();
