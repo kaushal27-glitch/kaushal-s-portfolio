@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, User, MessageSquare, Clock, RefreshCw, Inbox } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, User, MessageSquare, Clock, RefreshCw, Inbox, Trash2 } from "lucide-react";
 import LinuxWindow from "@/components/LinuxWindow";
 
 interface Contact {
@@ -16,6 +16,8 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<Contact | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
 
   const fetchContacts = async () => {
     setLoading(true);
@@ -32,21 +34,35 @@ const Admin = () => {
     }
   };
 
-  useEffect(() => {
-    fetchContacts();
-  }, []);
+  useEffect(() => { fetchContacts(); }, []);
 
-  const formatDate = (iso: string) => {
-    const d = new Date(iso);
-    return d.toLocaleString("en-IN", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
+  const handleDelete = async (id: number) => {
+    if (confirmId !== id) {
+      setConfirmId(id);
+      return;
+    }
+    setDeletingId(id);
+    setConfirmId(null);
+    try {
+      const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      setContacts(prev => prev.filter(c => c.id !== id));
+      if (selected?.id === id) setSelected(null);
+    } catch {
+      setError("Failed to delete message. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
   };
+
+  const formatDate = (iso: string) =>
+    new Date(iso).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
 
   return (
     <div className="min-h-screen bg-background px-4 py-10">
       <div className="max-w-5xl mx-auto">
+
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,83 +109,127 @@ const Admin = () => {
 
         {!loading && contacts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
             {/* List */}
             <div className="space-y-2">
-              {contacts.map((c, i) => (
-                <motion.div
-                  key={c.id}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                  onClick={() => setSelected(c)}
-                  className={`cursor-pointer rounded-md border px-4 py-3 transition-colors ${
-                    selected?.id === c.id
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/40 hover:bg-secondary/30"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-mono text-sm font-semibold text-foreground flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-primary" />
-                      {c.name}
-                    </span>
-                    <span className="text-xs font-mono text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {formatDate(c.created_at)}
-                    </span>
-                  </div>
-                  <p className="text-xs font-mono text-muted-foreground truncate flex items-center gap-1.5">
-                    <Mail className="w-3 h-3 shrink-0" />
-                    {c.email}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1.5 line-clamp-1">
-                    {c.message}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Detail */}
-            <div className="sticky top-6">
-              {selected ? (
-                <motion.div
-                  key={selected.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <LinuxWindow title={`message-${selected.id}.txt`}>
-                    <div className="space-y-3 font-mono text-sm">
-                      <div>
-                        <span className="text-primary text-xs">FROM</span>
-                        <p className="text-foreground mt-0.5">{selected.name}</p>
-                      </div>
-                      <div>
-                        <span className="text-primary text-xs">EMAIL</span>
-                        <p className="text-foreground mt-0.5">
-                          <a href={`mailto:${selected.email}`} className="underline underline-offset-2 hover:text-primary">
-                            {selected.email}
-                          </a>
-                        </p>
-                      </div>
-                      <div>
-                        <span className="text-primary text-xs">RECEIVED</span>
-                        <p className="text-muted-foreground mt-0.5 text-xs">{formatDate(selected.created_at)}</p>
-                      </div>
-                      <div>
-                        <span className="text-primary text-xs flex items-center gap-1">
-                          <MessageSquare className="w-3 h-3" /> MESSAGE
+              <AnimatePresence initial={false}>
+                {contacts.map((c, i) => (
+                  <motion.div
+                    key={c.id}
+                    initial={{ opacity: 0, x: -12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20, height: 0, marginBottom: 0, overflow: "hidden" }}
+                    transition={{ delay: i * 0.03, duration: 0.2 }}
+                    onClick={() => { setSelected(c); setConfirmId(null); }}
+                    className={`relative cursor-pointer rounded-md border px-4 py-3 transition-colors ${
+                      selected?.id === c.id
+                        ? "border-primary bg-primary/10"
+                        : "border-border hover:border-primary/40 hover:bg-secondary/30"
+                    } ${deletingId === c.id ? "opacity-40 pointer-events-none" : ""}`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-sm font-semibold text-foreground flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-primary" />
+                        {c.name}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono text-muted-foreground flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {formatDate(c.created_at)}
                         </span>
-                        <p className="text-foreground mt-1.5 whitespace-pre-wrap leading-relaxed">{selected.message}</p>
+                        <button
+                          onClick={e => { e.stopPropagation(); handleDelete(c.id); }}
+                          title={confirmId === c.id ? "Click again to confirm" : "Delete"}
+                          className={`p-1 rounded transition-colors ${
+                            confirmId === c.id
+                              ? "text-destructive bg-destructive/15 hover:bg-destructive/25"
+                              : "text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                          }`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     </div>
-                  </LinuxWindow>
-                </motion.div>
-              ) : (
-                <div className="border border-dashed border-border rounded-md flex items-center justify-center h-48 text-muted-foreground text-sm font-mono">
-                  ← Select a message to read
-                </div>
-              )}
+                    <p className="text-xs font-mono text-muted-foreground truncate flex items-center gap-1.5">
+                      <Mail className="w-3 h-3 shrink-0" />
+                      {c.email}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1.5 line-clamp-1">
+                      {c.message}
+                    </p>
+                    {confirmId === c.id && (
+                      <p className="text-xs text-destructive font-mono mt-1.5">
+                        ⚠ Click trash again to confirm delete
+                      </p>
+                    )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {/* Detail panel */}
+            <div className="sticky top-6">
+              <AnimatePresence mode="wait">
+                {selected ? (
+                  <motion.div
+                    key={selected.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <LinuxWindow title={`message-${selected.id}.txt`}>
+                      <div className="space-y-3 font-mono text-sm">
+                        <div>
+                          <span className="text-primary text-xs">FROM</span>
+                          <p className="text-foreground mt-0.5">{selected.name}</p>
+                        </div>
+                        <div>
+                          <span className="text-primary text-xs">EMAIL</span>
+                          <p className="text-foreground mt-0.5">
+                            <a href={`mailto:${selected.email}`} className="underline underline-offset-2 hover:text-primary">
+                              {selected.email}
+                            </a>
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-primary text-xs">RECEIVED</span>
+                          <p className="text-muted-foreground mt-0.5 text-xs">{formatDate(selected.created_at)}</p>
+                        </div>
+                        <div>
+                          <span className="text-primary text-xs flex items-center gap-1">
+                            <MessageSquare className="w-3 h-3" /> MESSAGE
+                          </span>
+                          <p className="text-foreground mt-1.5 whitespace-pre-wrap leading-relaxed">{selected.message}</p>
+                        </div>
+                        <div className="pt-2 border-t border-border">
+                          <button
+                            onClick={() => handleDelete(selected.id)}
+                            className={`flex items-center gap-1.5 text-xs font-mono px-3 py-1.5 rounded border transition-colors ${
+                              confirmId === selected.id
+                                ? "border-destructive text-destructive bg-destructive/10 hover:bg-destructive/20"
+                                : "border-border text-muted-foreground hover:text-destructive hover:border-destructive/50"
+                            }`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            {confirmId === selected.id ? "Confirm delete" : "Delete message"}
+                          </button>
+                        </div>
+                      </div>
+                    </LinuxWindow>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="border border-dashed border-border rounded-md flex items-center justify-center h-48 text-muted-foreground text-sm font-mono"
+                  >
+                    ← Select a message to read
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         )}

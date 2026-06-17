@@ -101,6 +101,16 @@ app.get('/api/contacts', async (req, res) => {
   }
 });
 
+app.delete('/api/contacts/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM contacts WHERE id = $1', [id]);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
