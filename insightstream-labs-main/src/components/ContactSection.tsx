@@ -18,8 +18,8 @@ const ContactSection = () => {
     setSubmitStatus('idle');
 
     try {
-      // Use Heroku backend URL in production, localhost in development
-      const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      // Use env var for production backend, or relative path (proxied by Vite) in dev
+      const backendURL = import.meta.env.VITE_BACKEND_URL || '';
       
       // Send to backend API
       const response = await fetch(`${backendURL}/api/contact`, {
