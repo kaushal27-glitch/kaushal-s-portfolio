@@ -92,6 +92,15 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
+app.get('/api/contacts', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM contacts ORDER BY created_at DESC');
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
