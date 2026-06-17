@@ -1,13 +1,22 @@
 {
-  "name": "insightstream-labs-main-(1)",
+  "name": "kaushal-portfolio",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Kaushal G's portfolio website - Full stack project with React frontend and Node.js backend",
+  "private": true,
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "frontend:dev": "npm run dev --prefix ./insightstream-labs-main",
+    "frontend:build": "npm run build --prefix ./insightstream-labs-main",
+    "frontend:preview": "npm run preview --prefix ./insightstream-labs-main",
+    "backend:dev": "npm run dev --prefix ./backend",
+    "backend:start": "npm start --prefix ./backend",
+    "setup": "npm ci --prefix ./backend && npm ci --prefix ./insightstream-labs-main"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "workspaces": [
+    "backend",
+    "insightstream-labs-main"
+  ],
+  "keywords": ["portfolio", "react", "vite", "typescript", "node"],
+  "author": "Kaushal G",
+  "license": "MIT"
 }
