@@ -17,42 +17,52 @@ const ContactSection = () => {
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
+    const formspreeId = import.meta.env.VITE_FORMSPREE_ID;
+
     try {
-      // Use Heroku backend URL in production, localhost in development
-      const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-      
-      // Send to backend API
+      // Try the local backend first (works on Replit)
+      const backendURL = import.meta.env.VITE_BACKEND_URL || '';
       const response = await fetch(`${backendURL}/api/contact`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          message: form.message,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         setSubmitStatus('success');
-        setStatusMessage('✅ Message saved to database! I\'ll get back to you soon.');
-        // Clear form
+        setStatusMessage("✅ Message sent! I'll get back to you soon.");
         setForm({ name: "", email: "", message: "" });
-        // Clear status after 3 seconds
         setTimeout(() => setSubmitStatus('idle'), 3000);
-      } else {
-        setSubmitStatus('error');
-        setStatusMessage('❌ Error saving message. Please try again.');
+        return;
       }
-    } catch (error) {
+    } catch {
+      // Backend unreachable — fall through to Formspree
+    }
+
+    // Fallback: Formspree (used on GitHub Pages where there is no backend)
+    if (formspreeId) {
+      try {
+        const res = await fetch(`https://formspree.io/f/${formspreeId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+        });
+        if (res.ok) {
+          setSubmitStatus('success');
+          setStatusMessage("✅ Message sent! I'll get back to you soon.");
+          setForm({ name: "", email: "", message: "" });
+          setTimeout(() => setSubmitStatus('idle'), 3000);
+        } else {
+          setSubmitStatus('error');
+          setStatusMessage('❌ Failed to send message. Please try again.');
+        }
+      } catch {
+        setSubmitStatus('error');
+        setStatusMessage('❌ Could not send message. Please email me directly.');
+      }
+    } else {
       setSubmitStatus('error');
-      setStatusMessage('❌ Could not connect to server. Make sure backend is running on localhost:5000');
-      console.error('Error submitting form:', error);
-    } finally {
-      setIsSubmitting(false);
+      setStatusMessage('❌ Could not connect to server. Please email me directly.');
     }
   };
 

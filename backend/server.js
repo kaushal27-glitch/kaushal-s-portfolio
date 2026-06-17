@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 // Database Connection
@@ -28,10 +29,29 @@ pool.on('error', (err) => {
 });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.BACKEND_PORT || process.env.PORT || 3001;
 
 app.use(cors());          
 app.use(express.json());  
+
+// Rate limiter: max 10 attempts per 15 minutes per IP
+const adminAuthLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts. Try again in 15 minutes.' },
+});
+
+// Admin Auth
+app.post('/api/admin/auth', adminAuthLimiter, (req, res) => {
+  const { password } = req.body;
+  if (password && password === process.env.ADMIN_PASSWORD) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(401).json({ success: false });
+  }
+});
 
 // Root Route
 app.get('/', (req, res) => {
@@ -89,6 +109,25 @@ app.get('/api/projects', async (req, res) => {
       }
     ];
     res.status(200).json(portfolioProjects);
+  }
+});
+
+app.get('/api/contacts', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM contacts ORDER BY created_at DESC');
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/contacts/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM contacts WHERE id = $1', [id]);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
