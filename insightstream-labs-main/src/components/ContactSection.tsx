@@ -70,7 +70,7 @@ const ContactSection = () => {
     // Direct download link using the correct path with base URL
     const baseUrl = import.meta.env.BASE_URL;
     const link = document.createElement('a');
-    link.href = `${baseUrl}KaushalG_CV_.pdf`;
+    link.href = `${baseUrl}KaushalG_CV.pdf`;
     link.download = 'Kaushal_G_Resume.pdf';
     link.setAttribute('target', '_blank');
     document.body.appendChild(link);
@@ -205,7 +205,7 @@ const ContactSection = () => {
                   Download my resume to learn more about my experience, skills, and projects.
                 </p>
                 <a
-                  href={`${import.meta.env.BASE_URL}KaushalG_CV_.pdf`}
+                  href={`${import.meta.env.BASE_URL}KaushalG_CV.pdf`}
                   download="Kaushal_G_Resume.pdf"
                   className="inline-block"
                 >

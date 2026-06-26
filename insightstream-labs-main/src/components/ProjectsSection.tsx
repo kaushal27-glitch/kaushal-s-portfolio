@@ -76,7 +76,7 @@ const ProjectsSection = () => {
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-2xl font-bold text-foreground mb-1">
-                        ANATOM – AI-Ready E-commerce Architecture
+                        Web Analytics Dashboard
                       </h3>
                       <div className="font-mono text-xs text-muted-foreground">Apr 2025 – Jun 2025</div>
                     </div>
@@ -111,6 +111,49 @@ const ProjectsSection = () => {
                       <h4 className="font-mono text-sm text-terminal-cyan mb-3">## Tech Stack</h4>
                       <div className="flex flex-wrap gap-2">
                         {["Python", "Flask", "Django", "MySQL", "PostgreSQL", "REST API"].map((t) => (
+                          <span
+                            key={t}
+                            className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono text-primary"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </LinuxWindow>
+              </div>
+
+              {/* New Project: Job Market Analytics Platform */}
+              <div className="flex-shrink-0 w-[550px] snap-start">
+                <LinuxWindow title="~/projects/job-market-analytics/README.md" className="h-full">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground mb-1">
+                        Job Market Analytics Platform
+                      </h3>
+                      <div className="font-mono text-xs text-muted-foreground">Jun 2025 – Present</div>
+                    </div>
+
+                    <div>
+                      <ul className="list-disc ml-5 text-muted-foreground leading-relaxed">
+                        <li>Architected multi-source data extraction pipeline using Selenium and Scrapy, successfully ingesting 50,000+ live job listings with 100% collection density.</li>
+                        <li>Designed a relational database schema that eliminated 99.8% of duplicate records to enforce data integrity.</li>
+                        <li>Optimized backend SQL queries to achieve sub-second response times (&lt;0.5s) on 50,000+ records, facilitating real-time analytics streaming.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="font-mono text-sm text-terminal-cyan mb-3">## Tech Stack</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          "Python",
+                          "Selenium",
+                          "Scrapy",
+                          "SQL",
+                          "Relational Database",
+                          "Real-time Analytics",
+                        ].map((t) => (
                           <span
                             key={t}
                             className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono text-primary"
