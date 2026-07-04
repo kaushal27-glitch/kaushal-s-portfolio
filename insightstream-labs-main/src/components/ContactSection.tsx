@@ -92,7 +92,6 @@ const ContactSection = () => {
               <div className="space-y-4">
                 {[
                   { icon: Mail, label: "kaushalg718@gmail.com", href: "mailto:kaushalg718@gmail.com", isLocation: false },
-                  { icon: Phone, label: "+91 7483481812", href: "tel:+917483481812", isLocation: false },
                   { icon: MapPin, label: "Bengaluru, India", href: "#", isLocation: true },
                   { icon: Linkedin, label: "LinkedIn Profile", href: "https://www.linkedin.com/in/kaushalg718", isLocation: false },
                   { icon: Github, label: "GitHub Profile", href: "https://github.com/kaushal27-glitch", isLocation: false },
