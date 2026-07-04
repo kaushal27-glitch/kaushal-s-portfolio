@@ -33,19 +33,19 @@ Backend/DB: Replit or Heroku (Procfile included for Heroku)
 
 Project Structure
 
-.
-├── backend/                  # Express API + PostgreSQL access layer
-│   ├── server.js             # Main server: routes, auth, rate limiting
-│   ├── setup-db.js           # One-time script to create DB + user
-│   ├── setup.sql             # Table schema (projects, contacts, skills)
-│   └── .env.example          # Template for required env vars
-├── insightstream-labs-main/  # React frontend (Vite + TS + Tailwind)
-│   └── src/
-│       ├── components/       # UI sections (Hero, Contact, AdminGate, etc.)
-│       └── pages/            # Route-level pages (Index, Admin)
-├── Procfile                  # Heroku start command
-├── .replit                   # Replit workflow/deployment config
-└── package.json              # Root workspace scripts
+     .
+     ├── backend/                  # Express API + PostgreSQL access layer
+     │   ├── server.js             # Main server: routes, auth, rate limiting
+     │   ├── setup-db.js           # One-time script to create DB + user
+     │   ├── setup.sql             # Table schema (projects, contacts, skills)
+     │   └── .env.example          # Template for required env vars
+     ├── insightstream-labs-main/  # React frontend (Vite + TS + Tailwind)
+     │   └── src/
+     │       ├── components/       # UI sections (Hero, Contact, AdminGate, etc.)
+     │       └── pages/            # Route-level pages (Index, Admin)
+     ├── Procfile                  # Heroku start command
+     ├── .replit                   # Replit workflow/deployment config
+     └── package.json              # Root workspace scripts
 
 Getting Started
 
