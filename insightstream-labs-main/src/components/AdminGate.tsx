@@ -16,7 +16,7 @@ const AdminGate = ({ children }: AdminGateProps) => {
   const [checking, setChecking] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY) === "true") {
+    if (sessionStorage.getItem(SESSION_KEY)) {
       setAuthed(true);
     }
   }, []);
@@ -33,7 +33,8 @@ const AdminGate = ({ children }: AdminGateProps) => {
         body: JSON.stringify({ password }),
       });
       if (res.ok) {
-        sessionStorage.setItem(SESSION_KEY, "true");
+        const data = await res.json();
+        sessionStorage.setItem(SESSION_KEY, data.token);
         setAuthed(true);
       } else if (res.status === 429) {
         setError("Too many attempts. Try again in 15 minutes.");

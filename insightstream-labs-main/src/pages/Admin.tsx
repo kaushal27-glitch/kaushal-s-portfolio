@@ -19,11 +19,15 @@ const Admin = () => {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [confirmId, setConfirmId] = useState<number | null>(null);
 
+  const token = sessionStorage.getItem("admin_auth");
+
   const fetchContacts = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/contacts");
+      const res = await fetch("/api/contacts", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const data = await res.json();
       setContacts(data);
@@ -44,7 +48,10 @@ const Admin = () => {
     setDeletingId(id);
     setConfirmId(null);
     try {
-      const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/contacts/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) throw new Error("Delete failed");
       setContacts(prev => prev.filter(c => c.id !== id));
       if (selected?.id === id) setSelected(null);
