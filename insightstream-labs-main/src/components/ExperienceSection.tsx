@@ -32,6 +32,18 @@ const experiences = [
     ],
     metrics: ["+10% leads", "+20% accuracy"],
   },
+  {
+    title: "Data Analyst",
+    company: "APOTEX",
+    location: "Bengaluru",
+    duration: "Nov 2025 – Apr 2026",
+    achievements: [
+      "Conducted exploratory data analysis (EDA) on 600,000+ rows of brand and generic pharmaceutical market data, utilizing Python to implement automated scripts that boosted report generation efficiency by 35%.",
+      "Collaborated with Global Supply Chain and Quality Assurance teams to parse serialization datasets, designing a normalized database schema that reduced validation redundancy by 25% while ensuring 100% data accuracy.",
+      "Built and optimized interactive Power BI dashboards to monitor commercial compliance and product launch KPIs, streamlining data pipelines via SQL queries to lower processing latency by 40%.",
+    ],
+    metrics: ["+35% report efficiency", "-25% validation redundancy", "-40% latency"],
+  },
 ];
 
 const ExperienceSection = () => {
