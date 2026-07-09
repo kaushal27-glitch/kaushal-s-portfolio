@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import LinuxWindow from "./LinuxWindow";
-import { Mail, Phone, MapPin, Linkedin, Github, Download, X } from "lucide-react";
+import { Mail, MapPin, Linkedin, Github, Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import React from 'react';
