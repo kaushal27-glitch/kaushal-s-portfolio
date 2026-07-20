@@ -67,10 +67,10 @@ const ContactSection = () => {
   };
 
   const handleResumeDownload = () => {
-    // Direct download link using the correct path with base URL
     const baseUrl = import.meta.env.BASE_URL;
+    const resumeUrl = `${baseUrl}KaushalG_CV.pdf?v=${Date.now()}`;
     const link = document.createElement('a');
-    link.href = `${baseUrl}KaushalG_CV.pdf`;
+    link.href = resumeUrl;
     link.download = 'Kaushal_G_Resume.pdf';
     link.setAttribute('target', '_blank');
     document.body.appendChild(link);
@@ -203,15 +203,11 @@ const ContactSection = () => {
                 <p className="text-sm text-muted-foreground">
                   Download my resume to learn more about my experience, skills, and projects.
                 </p>
-                <a
-                  href={`${import.meta.env.BASE_URL}KaushalG_CV.pdf`}
-                  download="Kaushal_G_Resume.pdf"
-                  className="inline-block"
-                >
-                  <Button variant="terminal" className="w-full">
+                <div className="inline-block">
+                  <Button variant="terminal" className="w-full" onClick={handleResumeDownload}>
                     $ download --resume
                   </Button>
-                </a>
+                </div>
               </div>
             </LinuxWindow>
           </motion.div>
