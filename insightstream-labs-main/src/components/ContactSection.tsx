@@ -66,22 +66,32 @@ const ContactSection = () => {
     }
   };
 
-  const handleResumeDownload = () => {
-    const baseUrl = import.meta.env.BASE_URL.endsWith('/')
-      ? import.meta.env.BASE_URL
-      : `${import.meta.env.BASE_URL}/`;
+  const handleResumeDownload = async () => {
+    try {
+      const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+        ? import.meta.env.BASE_URL
+        : `${import.meta.env.BASE_URL}/`;
 
-    const resumeUrl = `${baseUrl}KaushalG_CV_Updated.pdf?v=${Date.now()}`;
+      const resumeUrl = `${baseUrl}KaushalG_CV_Updated.pdf?v=${Date.now()}`;
 
-    const link = document.createElement('a');
-    link.href = resumeUrl;
-    link.download = 'Kaushal_G_Resume.pdf';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
+      // Fetch the PDF as a blob to avoid navigation / cross-origin/download issues
+      const res = await fetch(resumeUrl, { cache: 'reload' });
+      if (!res.ok) throw new Error(`Download failed: ${res.status}`);
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'Kaushal_G_Resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Resume download error:', err);
+      setStatusMessage('Could not download resume. Try refreshing the page.');
+      setSubmitStatus('error');
+    }
   };
 
   return (
