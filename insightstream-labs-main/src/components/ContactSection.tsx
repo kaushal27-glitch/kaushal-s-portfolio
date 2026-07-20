@@ -66,17 +66,25 @@ const ContactSection = () => {
     }
   };
 
-  const handleResumeDownload = () => {
-    const baseUrl = import.meta.env.BASE_URL;
-    const resumeUrl = `${baseUrl}KaushalG_CV_latest.pdf?v=${Date.now()}`;
-    const link = document.createElement('a');
-    link.href = resumeUrl;
-    link.download = 'Kaushal_G_Resume.pdf';
-    link.setAttribute('target', '_blank');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+ const handleResumeDownload = () => {
+  // Ensure BASE_URL ends with a slash, or handle standard public pathing
+  const baseUrl = import.meta.env.BASE_URL.endsWith('/') 
+    ? import.meta.env.BASE_URL 
+    : `${import.meta.env.BASE_URL}/`;
+    
+  // Timestamp query param forces fresh fetch bypassing CDN cache
+  const resumeUrl = `${baseUrl}KaushalG_CV_latest.pdf?v=${Date.now()}`;
+  
+  const link = document.createElement('a');
+  link.href = resumeUrl;
+  link.download = 'Kaushal_G_Resume.pdf';
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
   return (
     <section id="contact" className="py-20">
