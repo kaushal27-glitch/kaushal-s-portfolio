@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode, FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Lock, Eye, EyeOff, Terminal } from "lucide-react";
 
@@ -21,7 +21,7 @@ const AdminGate = ({ children }: AdminGateProps) => {
     }
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setChecking(true);
     setError("");
