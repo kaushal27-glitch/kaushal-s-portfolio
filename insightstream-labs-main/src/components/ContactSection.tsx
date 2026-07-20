@@ -68,7 +68,7 @@ const ContactSection = () => {
 
   const handleResumeDownload = () => {
     const baseUrl = import.meta.env.BASE_URL;
-    const resumeUrl = `${baseUrl}KaushalG_CV.pdf?v=${Date.now()}`;
+    const resumeUrl = `${baseUrl}KaushalG_CV_latest.pdf?v=${Date.now()}`;
     const link = document.createElement('a');
     link.href = resumeUrl;
     link.download = 'Kaushal_G_Resume.pdf';
